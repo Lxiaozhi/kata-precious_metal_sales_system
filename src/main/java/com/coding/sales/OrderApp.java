@@ -47,38 +47,48 @@ public class OrderApp {
         OrderRepresentation result = null;
 
         //TODO: 请完成需求指定的功能
-        String orderId=command.getOrderId();
+        String orderId=command.getOrderId();//订单号
         Date createTime=new Date();
         try {
-            createTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(command.getCreateTime());
+            createTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(command.getCreateTime());//创建日期
         }catch (Exception e){
             e.getLocalizedMessage();
         }
-        String memberNo=command.getMemberId();
+        String memberNo=command.getMemberId();//客户卡号
         custInfo cust=GetCustInfo.byIdGetCustInfo(memberNo);
-        String memberName= cust.getCustName();
-        String oldMemberType=cust.getCustLevel();
-        int custSroce=cust.getCustSroce();
-        String newMemberType="";
+        String memberName= cust.getCustName();//客户姓名
+        String oldMemberType=cust.getCustLevel();//客户原等级
+        int custSroce=cust.getCustSroce();//客户原有积分
+        String newMemberType="";//客户新等级
 
-        BigDecimal totalPrice=BigDecimal.ZERO;
-        BigDecimal totalDiscountPrice=BigDecimal.ZERO;
-        List<OrderItemRepresentation> orderItems=new ArrayList<OrderItemRepresentation>();
+        BigDecimal totalPrice=BigDecimal.ZERO;//总金额
+        BigDecimal totalDiscountPrice=BigDecimal.ZERO;//优惠金额
+        List<OrderItemRepresentation> orderItems=new ArrayList<OrderItemRepresentation>();//产品清单列表
+        List<DiscountItemRepresentation> discountItems=new ArrayList<DiscountItemRepresentation>();//优惠产品列表
 
-        List<OrderItemCommand> payments=command.getItems();
-        BigDecimal total=new BigDecimal(0.0);
+        List<OrderItemCommand> payments=command.getItems();//
+        BigDecimal total=BigDecimal.valueOf(0.0);//实际支付金额
         for(int i=0;i<payments.size();i++){
             OrderItemCommand paymentCommand=payments.get(i);
             String productId=paymentCommand.getProduct();
             BigDecimal amount=paymentCommand.getAmount();
             PreciousMetal preciousMetal= GetPreciousMetalInfo.getPreciousMetal(productId);
             BigDecimal price=preciousMetal.getPrice();
+            //获取产品清单
             OrderItemRepresentation orderItemRepresentation=new OrderItemRepresentation(productId,preciousMetal.getProductName(),price,amount,price.multiply(amount));
             orderItems.add(orderItemRepresentation);
+            //获取产品优惠信息
+            BigDecimal discount=BigDecimal.valueOf(preciousMetal.getDiscount());
+            if(discount.compareTo(BigDecimal.ZERO)!=0) {
+                //优惠金额
+                discount = BigDecimal.valueOf(1).subtract(discount);
+                DiscountItemRepresentation discountItemRepresentation = new DiscountItemRepresentation(productId, preciousMetal.getProductName(), price.multiply(discount).multiply(amount));
+                discountItems.add(discountItemRepresentation);
+                totalDiscountPrice = totalDiscountPrice.add(price.multiply(discount).multiply(amount));//优惠总金额
+            }
             totalPrice=totalPrice.add(price.multiply(amount));
         }
         int memberPointsIncreased=(int)Math.floor(total.doubleValue());
-        System.out.println(memberPointsIncreased);
         int memberPoints=custSroce+memberPointsIncreased;
         System.out.println(memberPointsIncreased+""+memberPoints);
 
@@ -88,22 +98,8 @@ public class OrderApp {
                 memberNo, memberName, oldMemberType, newMemberType,
                 memberPointsIncreased, memberPoints,
                 orderItems, totalPrice,
-                getDiscountItems(), totalDiscountPrice, total, getPayments(), getDiscountCards());
+                discountItems, totalDiscountPrice, total, getPayments(), getDiscountCards());
         return result;
-    }
-    private List<OrderItemRepresentation> getOrderItems() {
-
-        return Arrays.asList(
-                new OrderItemRepresentation("0001", "AAA", new BigDecimal("101.1"), new BigDecimal("2"), new BigDecimal(202.2)),
-                new OrderItemRepresentation("0002", "BBB", new BigDecimal("101.1"), new BigDecimal("2"), new BigDecimal(202.2))
-        );
-    }
-
-    private List<DiscountItemRepresentation> getDiscountItems() {
-        return Arrays.asList(
-                new DiscountItemRepresentation("0001", "AAA", new BigDecimal(10.0)),
-                new DiscountItemRepresentation("0002", "BBB", new BigDecimal(10.0))
-        );
     }
 
     private List<PaymentRepresentation> getPayments() {

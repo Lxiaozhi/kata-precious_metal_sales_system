@@ -31,6 +31,7 @@ public class GetPreciousMetalInfo {
         preciousMetal.setProductName(productName);
         preciousMetal.setUnit(unit);
         preciousMetal.setPrice(price);
+        preciousMetal.setDiscount(discount);
         return preciousMetal;
     }
 }

@@ -125,7 +125,7 @@ public class OrderRepresentation {
                 "商品及数量           单价         金额\n";
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        return String.format(reportTitle, orderId, dateFormat.format(createTime), memberNo, memberName, newMemberType, memberPoints);
+        return String.format(reportTitle, orderId, dateFormat.format(createTime), memberNo, memberName, oldMemberType, memberPoints);
     }
 
     private String getOrderDetail() {

@@ -2,11 +2,11 @@ package com.coding.sales.trans;
 
 import java.util.List;
 
-public class CustInfo {
+public class custInfo {
     private  String custName;//客户名称
     private  String custLevel;//客户等级
     private  String CardNo;//客户卡号
-    private  String custSroce;//客户积分
+    private  int custSroce;//客户积分
     private List<String> custInfo;//客户信息
 
     public String getCustName() {
@@ -33,11 +33,11 @@ public class CustInfo {
         CardNo = cardNo;
     }
 
-    public String getCustSroce() {
+    public int getCustSroce() {
         return custSroce;
     }
 
-    public void setCustSroce(String custSroce) {
+    public void setCustSroce(int custSroce) {
         this.custSroce = custSroce;
     }
 

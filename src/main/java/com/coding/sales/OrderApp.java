@@ -8,6 +8,7 @@ import com.coding.sales.output.OrderItemRepresentation;
 import com.coding.sales.output.PaymentRepresentation;
 import com.coding.sales.trans.PreciousMetal;
 import com.coding.sales.output.OrderRepresentation;
+import com.coding.sales.trans.Transfer;
 import com.coding.sales.trans.custInfo;
 import com.coding.sales.utils.GetCustInfo;
 import com.coding.sales.utils.GetPreciousMetalInfo;
@@ -46,7 +47,6 @@ public class OrderApp {
     OrderRepresentation checkout(OrderCommand command) {
         OrderRepresentation result = null;
 
-        //TODO: 请完成需求指定的功能
         String orderId=command.getOrderId();//订单号
         Date createTime=new Date();
         try {
@@ -88,10 +88,10 @@ public class OrderApp {
             }
             totalPrice=totalPrice.add(price.multiply(amount));
         }
-        int memberPointsIncreased=(int)Math.floor(total.doubleValue());
-        int memberPoints=custSroce+memberPointsIncreased;
-        System.out.println(memberPointsIncreased+""+memberPoints);
-
+        int memberPointsIncreased=(int)Math.floor(total.doubleValue());//新增积分
+        int memberPoints=custSroce+memberPointsIncreased;//现有积分
+        newMemberType=new Transfer().bySorceCalcCustLevel(memberPoints);//客户新等级
+        total=totalPrice.subtract(totalDiscountPrice);//实际支付
 
         result =new  OrderRepresentation(
                 orderId, createTime,

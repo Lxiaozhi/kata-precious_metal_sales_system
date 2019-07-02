@@ -31,5 +31,50 @@ public class Transfer {
         }
         return lvl;
     }
-   
+    /*
+   * 满减活动
+   *proNum 产品数量
+   * proPrice 产品价格
+   * manjianType 满减类型
+   * 0-每满3000元减350
+   * 1-每满2000元减30
+   * 2-每满1000元减10
+   * 3-第3件半价（买3件及以上，其中1件半价）
+   * 4-满3送1（买4件及以上，其中1件免费）
+   * */
+    public BigDecimal manjian(int manjianType,int proNum,BigDecimal proPrice){
+        BigDecimal proMoney=proPrice;
+        switch (manjianType){
+            case 0:
+                if(proPrice.intValue()>=3000){
+                    proMoney=proPrice.subtract(BigDecimal.valueOf(350));
+                }
+                break;
+            case 1:
+                if(proPrice.intValue()>=2000){
+                    proMoney=proPrice.subtract(BigDecimal.valueOf(30));
+                }
+                break;
+            case 2:
+                if(proPrice.intValue()>=1000){
+                    proMoney=proPrice.subtract(BigDecimal.valueOf(10));
+                }
+                break;
+            case 3:
+                if(proNum>=3){
+                    proMoney = proPrice.multiply(BigDecimal.valueOf(2));//两件商品得价格
+                    proPrice=proPrice.divide(proPrice,2,BigDecimal.ROUND_HALF_UP);//一件商品半价
+                    proMoney= proMoney.add(proPrice);//两个价格相加
+                }
+                break;
+            case 4:
+                if(proNum>=4){
+                    proNum=proNum-1;
+                    proMoney = proPrice.multiply(BigDecimal.valueOf(proNum));//两件商品得价格
+                }
+                break;
+        }
+        System.out.println(proMoney);
+        return proMoney;
+    }
 }

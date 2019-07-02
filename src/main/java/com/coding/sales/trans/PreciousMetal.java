@@ -7,6 +7,15 @@ public class PreciousMetal {
     private  String unit;//商品单位
     private BigDecimal price;//商品价格
     private  Double discount;//商品折扣
+    private  boolean isManJian;//是否满减
+
+    public boolean isManJian() {
+        return isManJian;
+    }
+
+    public void setManJian(boolean manJian) {
+        isManJian = manJian;
+    }
 
     public String getProductName() {
         return productName;

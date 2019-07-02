@@ -2,7 +2,7 @@ package com.coding.sales.trans;
 
 import java.util.List;
 
-public class custInfo {
+public class CustInfo {
     private  String custName;//客户名称
     private  String custLevel;//客户等级
     private  String CardNo;//客户卡号

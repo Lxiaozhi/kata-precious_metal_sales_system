@@ -88,10 +88,11 @@ public class OrderApp {
             }
             totalPrice=totalPrice.add(price.multiply(amount));
         }
-        int memberPointsIncreased=(int)Math.floor(totalPrice.doubleValue());//新增积分
+        total=totalPrice.subtract(totalDiscountPrice);//实际支付
+        int memberPointsIncreased=(int)Math.floor(total.doubleValue());//新增积分
         int memberPoints=custSroce+memberPointsIncreased;//现有积分
         newMemberType=new Transfer().bySorceCalcCustLevel(memberPoints);//客户新等级
-        total=totalPrice.subtract(totalDiscountPrice);//实际支付
+        oldMemberType=newMemberType;
 
         result =new  OrderRepresentation(
                 orderId, createTime,

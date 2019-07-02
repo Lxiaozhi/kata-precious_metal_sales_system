@@ -31,11 +31,11 @@ public class OrderAppTest {
 
     @Test
     public void should_checkout_order() {
-        String orderCommand = FileUtils.readFromFile(getResourceFilePath(commandFileName));
+        String orderCommand = FileUtils.readFromFile(getResourceFilePath("sample_command.json"));
         OrderApp app = new OrderApp();
         String actualResult = app.checkout(orderCommand);
 
-        String expectedResult = FileUtils.readFromFile(getResourceFilePath(expectedResultFileName));
+        String expectedResult = FileUtils.readFromFile(getResourceFilePath("sample_result.txt"));
 
         assertEquals(expectedResult, actualResult);
     }

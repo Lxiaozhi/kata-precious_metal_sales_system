@@ -9,7 +9,7 @@ public class PreciousMetal {
     private  Double discount;//商品折扣
     private  boolean isManJian;//是否满减
 
-    public boolean isManJian() {
+    public boolean getIsManJian() {
         return isManJian;
     }
 
